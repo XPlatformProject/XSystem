@@ -3,11 +3,13 @@
 
 #include <XSystem\XSystem.h>
 
+#ifndef _XS_NOT_DEFINE_xsIniFileParameter
 typedef struct {
 	char m_sName[XS_MAX_C_STRING_SIZE];
 	char m_sValue[XS_MAX_C_STRING_SIZE];
-
+	bool m_bIsArray = false;
 }xsIniFileParameter;
+#endif
 
 typedef struct {
 	char m_sName[XS_MAX_C_STRING_SIZE];

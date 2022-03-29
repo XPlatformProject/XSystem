@@ -38,6 +38,9 @@ xsIniFileCtx* xsParseIniFile(const char* m_sPath){
 	std::vector<std::unordered_map<std::string, std::string>> 
 		m_vumParameters;
 
+	std::vector<std::unordered_map<std::string, bool>>
+		m_vubParameters;
+
 	while (!m_ifstream.eof()) {
 		std::getline(m_ifstream, m_sLine);
 		if (m_sLine.empty()) continue;
@@ -58,6 +61,10 @@ xsIniFileCtx* xsParseIniFile(const char* m_sPath){
 		}
 		else {
 			bool m_bIsString = false;
+			bool m_bIsArray = false;
+
+			std::vector<std::string> m_vsArrayParameters;
+
 			std::string m_sParameterName = "";
 			std::string m_sParameterVal = "";
 
@@ -79,10 +86,14 @@ xsIniFileCtx* xsParseIniFile(const char* m_sPath){
 			}
 
 			// Parameter value
-			for (; i < m_sLine.size(); i++) {
+			for (; i < m_sLine.size() + 1; i++) {
 				if(!m_bIsString)
 				if (m_sLine[i] == '"') {
 					m_bIsString = true;
+					continue;
+				}
+				else if (m_sLine[i] == '{') {
+					m_bIsArray = true;
 					continue;
 				}
 
@@ -95,12 +106,30 @@ xsIniFileCtx* xsParseIniFile(const char* m_sPath){
 						m_sTmp.clear();
 						break;
 					}
+					
+					if(m_bIsArray)
+					if (m_sLine[i] == ',') {
+						m_vsArrayParameters.push_back(m_sTmp);
+						m_sTmp.clear();
+						continue;
+					}
+					else if (m_sLine[i] == '}') {
+						m_vsArrayParameters.push_back(m_sTmp);
+						m_sTmp.clear();
+						break;
+					}
 				}
 				else {
 					if (m_sLine[i] == '"') {
-						m_sParameterVal = m_sTmp;
-						m_sTmp.clear();
-						break;
+						if (!m_bIsArray) {
+							m_sParameterVal = m_sTmp;
+							m_sTmp.clear();
+							break;
+						}
+						else {
+							m_bIsString = false;
+							continue;
+						}
 					}
 				}
 
@@ -111,15 +140,27 @@ xsIniFileCtx* xsParseIniFile(const char* m_sPath){
 				if (m_vSections[i].m_sName == m_sCurrentSection) {
 					if (m_vumParameters.size() <= i) {
 						m_vumParameters.resize(i + 1);
+						m_vubParameters.resize(i + 1);
 					}
-					m_vumParameters[i][m_sParameterName] = m_sParameterVal;
+					if (!m_bIsArray) {
+						m_vumParameters[i][m_sParameterName] = m_sParameterVal;
+					
+					}
+					else {
+						std::string m_sVal = "";
+						for (std::string& m_sArrayVal : m_vsArrayParameters) {
+							m_sVal += m_sArrayVal;
+							m_sVal += ";";
+						}
+						m_vumParameters[i][m_sParameterName] = m_sVal;
+					}
+
+					m_vubParameters[i][m_sParameterName] = m_bIsArray;
 					break;
 				}
 			}
 
 		}
-
-
 
 	}
 
@@ -134,14 +175,20 @@ xsIniFileCtx* xsParseIniFile(const char* m_sPath){
 	for (std::ptrdiff_t i = 0; i < m_vumParameters.size(); i++) {
 		
 		auto& m_Map = m_vumParameters[i];
+		auto& m_bMap = m_vubParameters[i];
 		std::ptrdiff_t m_nParametersCount = 0;
 		std::vector<std::string> m_sNames;
 		std::vector<std::string> m_sVals;
+		std::vector<bool> m_bIsArray;
 		for (auto It = m_Map.begin(); It != m_Map.end(); ++It) {
 			m_sNames.push_back(It->first);
 			m_sVals.push_back(It->second);
 
 			m_nParametersCount++;
+		}
+
+		for (auto It = m_bMap.begin(); It != m_bMap.end(); ++It) {
+			m_bIsArray.push_back(It->second);
 		}
 
 		xsIniFileSection* m_pSection = &m_pCtx->m_pSections[i];
@@ -153,6 +200,8 @@ xsIniFileCtx* xsParseIniFile(const char* m_sPath){
 		for (std::ptrdiff_t i = 0; i < m_pSection->m_nParametrsCount; i++) {
 			memcpy(m_pSection->m_pParametrs[i].m_sName, m_sNames[i].c_str(), XS_MAX_C_STRING_SIZE);
 			memcpy(m_pSection->m_pParametrs[i].m_sValue, m_sVals[i].c_str(), XS_MAX_C_STRING_SIZE);
+			
+			m_pSection->m_pParametrs[i].m_bIsArray = m_bIsArray[i];
 		}
 	}
 

@@ -10,7 +10,7 @@ xsExtensionModuleHandle m_pKernelHandle = NULL;
 xsAPI* xsLoadKernel(const xsExtensionInfo* KernelExtensionInfo, pfn_xsKernelMessageCallback Callback){
 	g_KernelMessage = Callback;
 
-	m_pKernelHandle = xsLoadLibrary(KernelExtensionInfo->m_sPath);
+	m_pKernelHandle = xsLoadLibrary(KernelExtensionInfo->m_sPath.c_str());
 	if (m_pKernelHandle == XS_NULL_HANDLE) {
 		return XS_NULL_HANDLE;
 	}

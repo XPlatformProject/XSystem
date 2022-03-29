@@ -9,8 +9,14 @@
 std::vector<xsExtensionInfo> m_vLoadedExtensionsInfo;
 std::vector<xsExtensionModuleHandle> m_vLoadedExtensionsHandles;
 
+void xsMemCpy(const void* Src, void* Dest, size_t m_nSize) {
+	memset(Dest, 0x0, m_nSize);
+	memcpy(Dest, Src, m_nSize);
+}
+
 xsResult xsKernelInit(xsExtensionInfo* KernelExtInfo){
 	//Add kernel extension!
+
 	m_vLoadedExtensionsInfo.push_back(*KernelExtInfo);
 	m_vLoadedExtensionsHandles.push_back(XS_NULL_HANDLE);
 
@@ -95,7 +101,7 @@ xsResult xsKernelLoadExtensionFromIni(const char* m_sPath, xsExtensionInfo* m_pE
 }
 
 xsResult xsKernelLoadExtension(xsExtensionInfo* m_pExtInfo){
-	xsExtensionModuleHandle m_pHandle = xsLoadLibrary(m_pExtInfo->m_sPath);
+	xsExtensionModuleHandle m_pHandle = xsLoadLibrary(m_pExtInfo->m_sPath.c_str());
 	if (m_pHandle == XS_NULL_HANDLE) {
 		return xsResult::XS_RESULT_FAILED;
 	}
@@ -112,6 +118,7 @@ xsResult xsKernelLoadExtension(xsExtensionInfo* m_pExtInfo){
 	}
 
 	m_vLoadedExtensionsHandles.push_back(m_pHandle);
+
 	m_vLoadedExtensionsInfo.push_back(*m_pExtInfo);
 	return xsResult::XS_RESULT_SUCCESS;
 }
@@ -126,16 +133,39 @@ xsExtensionInfo* xsGetKernelLoadedExtensionInfo(uint32_t m_nInx){
 	return &m_vLoadedExtensionsInfo[m_nInx];
 }
 
+xsExtensionInfo* xsGetKernelLoadedExtensionInfo(const char* m_sName){
+	for (std::ptrdiff_t i = 0; i < m_vLoadedExtensionsInfo.size(); i++) {
+		if (strcmp(m_vLoadedExtensionsInfo[i].m_sName.c_str(), m_sName) == 0) {
+			return &m_vLoadedExtensionsInfo[i];
+		}
+	}
+
+	return XS_NULL_HANDLE;
+}
+
+void* xsGetKernelLoadedExtensionProcAddr(uint32_t m_nInx, const char* m_sProcName){
+	assert(m_vLoadedExtensionsHandles.size() > m_nInx);
+
+	return xsGetProcAddr(m_vLoadedExtensionsHandles[m_nInx], m_sProcName);
+}
+
+void* xsGetKernelLoadedExtensionProcAddr(const char* m_sName, const char* m_sProcName){
+	xsExtensionModuleHandle m_pHandle = (xsExtensionModuleHandle)xsGetKernelLoadedExtensionHandle(m_sName);
+	if (m_pHandle == XS_NULL_HANDLE)return XS_NULL_HANDLE;
+
+	return xsGetProcAddr(m_pHandle, m_sProcName);
+}
+
 void* xsGetKernelLoadedExtensionHandle(uint32_t m_nInx) {
 	assert(m_vLoadedExtensionsInfo.size() <= m_nInx);
 
-	return (void*) &m_vLoadedExtensionsHandles[m_nInx];
+	return (void*) m_vLoadedExtensionsHandles[m_nInx];
 }
 
 void* xsGetKernelLoadedExtensionHandle(const char* m_sName){
 	for (std::ptrdiff_t i = 0; i < m_vLoadedExtensionsInfo.size(); i++) {
-		if (strcmp(m_vLoadedExtensionsInfo[i].m_sName, m_sName) == 0) {
-			return (void*) & m_vLoadedExtensionsHandles[i];
+		if (strcmp(m_vLoadedExtensionsInfo[i].m_sName.c_str(), m_sName) == 0) {
+			return (void*)m_vLoadedExtensionsHandles[i];
 		}
 	}
 

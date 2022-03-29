@@ -16,6 +16,9 @@ uint32_t xsGetKernelLoadedExtensionsCount();
 xsExtensionInfo* xsGetKernelLoadedExtensionInfo(uint32_t m_nInx);
 xsExtensionInfo* xsGetKernelLoadedExtensionInfo(const char* m_sName);
 
+void* xsGetKernelLoadedExtensionProcAddr(uint32_t m_nInx, const char* m_sProcName);
+void* xsGetKernelLoadedExtensionProcAddr(const char* m_sName, const char* m_sProcName);
+
 void* xsGetKernelLoadedExtensionHandle(uint32_t m_nInx);
 void* xsGetKernelLoadedExtensionHandle(const char* m_sName);
 
