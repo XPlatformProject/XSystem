@@ -1,7 +1,7 @@
 #ifndef _INI_X_SYSTEM_H
 #define _INI_X_SYSTEM_H
 
-#include<XSystem\XSystem.h>
+#include<XSystem/XSystem.h>
 
 typedef void* xsIniCtx;
 typedef void* xsIniSection;

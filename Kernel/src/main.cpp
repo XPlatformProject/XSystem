@@ -1,11 +1,11 @@
 #include<memory>
 
-#include<XSystem\XSystem.h>
-#include<XSystem.kernel\ini.h>
+#include<XSystem/XSystem.h>
+#include<XSystem.kernel/ini.h>
 
-#include "ini_parser\api\ini_parser_api.h"
+#include "ini_parser/api/ini_parser_api.h"
 
-#include "kernel\kernel.h"
+#include "kernel/kernel.h"
 
 #include "general.h"
 

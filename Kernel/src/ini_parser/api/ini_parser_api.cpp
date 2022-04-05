@@ -2,6 +2,8 @@
 
 #include "..//ini_parser.h"
 
+#include<string.h>
+
 xsIniCtx xsAPI_ParseIniFile(const char* m_pPath){
 	return xsParseIniFile(m_pPath);
 }

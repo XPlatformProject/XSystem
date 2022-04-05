@@ -1,7 +1,7 @@
 #ifndef _X_SYSTEM_INI_PARSER_API_H
 #define _X_SYSTEM_INI_PARSER_API_H
 
-#include<XSystem.kernel\ini.h>
+#include<XSystem.kernel/ini.h>
 
 xsIniCtx xsAPI_ParseIniFile(const char* m_pPath);
 xsIniSection xsAPI_GetSection(xsIniCtx m_pCtx, const char* m_sName);

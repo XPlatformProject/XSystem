@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 
 project("XSystem")
 
-add_library(XSystem.SDK STATIC "include/XSystem/XSystem.h" "src/main.cpp"  "src/Loader/Loader.cpp" "src/general.h" "include/XSystem/Loader.h")
+add_library(XSystem.SDK STATIC "src/main.cpp" "src/general.h" "src/Loader/Loader.cpp")
+target_include_directories(XSystem.SDK PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-target_include_directories(XSystem.SDK PUBLIC "include/")
+message(${CMAKE_CURRENT_SOURCE_DIR})
+
+if(UNIX)
+
+target_link_libraries(XSystem.SDK ${CMAKE_DL_LIBS})
+endif(UNIX)

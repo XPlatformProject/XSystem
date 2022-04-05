@@ -8,7 +8,7 @@ add_custom_command(
                 $<TARGET_FILE:${dependence}>
                 $<TARGET_FILE_DIR:${target}>)
 
-add_dependencies(${target} ${dependence})
+
 endfunction(xs_add_dependence)
 
 function(xs_add_dependence_module target dependence)
@@ -19,7 +19,7 @@ add_custom_command(
                 $<TARGET_FILE:${dependence}>
                 $<TARGET_FILE_DIR:${target}>/Engine/${dependence}.dll)
 
-add_dependencies(${target} ${dependence})
+
 endfunction(xs_add_dependence_module)
 
 function(xs_copy_file target in_path out_path)

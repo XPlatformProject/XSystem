@@ -1,7 +1,7 @@
 #ifndef _X_SYSTEM_INI_H
 #define _X_SYSTEM_INI_H
 
-#include <XSystem\XSystem.h>
+#include <XSystem/XSystem.h>
 
 #ifndef _XS_NOT_DEFINE_xsIniFileParameter
 typedef struct {

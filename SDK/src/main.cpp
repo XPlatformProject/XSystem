@@ -1,8 +1,7 @@
-#include <XSystem\XSystem.h>
+#include <XSystem/XSystem.h>
+#include <XSystem/Loader.h>
 
 #include "general.h"
-
-#include <XSystem\Loader.h>
 
 pfn_xsKernelMessageCallback g_KernelMessage = NULL;
 xsExtensionModuleHandle m_pKernelHandle = NULL;

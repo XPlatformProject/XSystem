@@ -1,7 +1,8 @@
 #ifndef _X_SYSTEM_KERNEL_H
 #define _X_SYSTEM_KERNEL_H
-#include<XSystem\XSystem.h>
-#include<XSystem\Loader.h>
+
+#include<XSystem/XSystem.h>
+#include<XSystem/Loader.h>
 
 #define XS_KERNEL_API extern "C" XS_API_EXPORT
 

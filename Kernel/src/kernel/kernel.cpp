@@ -2,6 +2,7 @@
 
 #include<vector>
 #include<cassert>
+#include<string.h>
 
 #include "..//ini_parser/ini_parser.h"
 #include "..//general.h"

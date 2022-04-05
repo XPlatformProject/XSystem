@@ -7,6 +7,7 @@
 #include <vector>
 #include <unordered_map>
 #include <iostream>
+#include <string.h>
 
 xsIniFileCtx* xsParseIniFile(const char* m_sPath){
 	std::ifstream m_ifstream(m_sPath);

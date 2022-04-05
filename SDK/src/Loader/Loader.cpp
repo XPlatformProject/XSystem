@@ -1,9 +1,10 @@
-#include <XSystem\Loader.h>
+#include <XSystem/Loader.h>
+#include <XSystem/XSystem.h>
+
+#include "..//general.h"
 
 #include<memory>
-
-#include<XSystem\XSystem.h>
-#include "..//general.h"
+#include<string.h>
 
 void xsPrintLibraryError(const char* path) {
 #ifdef WIN32
@@ -53,7 +54,7 @@ xsExtensionModuleHandle xsLoadLibrary(const char* path){
 #ifdef WIN32
 	m_Handle = LoadLibraryA(path);
 #else
-	m_Handle = dlopen(path.c_str(), RTLD_LAZY);
+	m_Handle = dlopen(path, RTLD_LAZY);
 #endif
 
 	if (m_Handle == NULL) {
