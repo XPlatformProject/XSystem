@@ -129,7 +129,7 @@ uint32_t xsGetKernelLoadedExtensionsCount(){
 }
 
 xsExtensionInfo* xsGetKernelLoadedExtensionInfo(uint32_t m_nInx){
-	assert(m_vLoadedExtensionsInfo.size() <= m_nInx);
+	assert(m_vLoadedExtensionsInfo.size() > m_nInx);
 
 	return &m_vLoadedExtensionsInfo[m_nInx];
 }
