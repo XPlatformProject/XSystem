@@ -4,6 +4,8 @@
 #include<cassert>
 #include<string.h>
 
+#include<iostream>
+
 #include "..//ini_parser/ini_parser.h"
 #include "..//general.h"
 
@@ -44,8 +46,6 @@ void xsKernelShutdown() {
 	m_vLoadedExtensionsInfo.clear();
 	m_vLoadedExtensionsHandles.clear();
 }
-
-#include<iostream>
 
 xsResult xsKernelLoadExtensionFromIni(const char* m_sPath, xsExtensionInfo* m_pExtInfo){
 	xsIniFileCtx* m_pCtx = xsParseIniFile(m_sPath);
@@ -155,6 +155,11 @@ void* xsGetKernelLoadedExtensionProcAddr(const char* m_sName, const char* m_sPro
 	if (m_pHandle == XS_NULL_HANDLE)return XS_NULL_HANDLE;
 
 	return xsGetProcAddr(m_pHandle, m_sProcName);
+}
+
+void xsModuleSendMessage(uint32_t m_nInx, const char* m_sMassage, const xsResult m_nRes){
+	
+	g_KernelMessage(m_sMassage, m_nRes);
 }
 
 void* xsGetKernelLoadedExtensionHandle(uint32_t m_nInx) {

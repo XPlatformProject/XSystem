@@ -51,6 +51,8 @@ xsAPI m_pAPI{
 	xsGetKernelLoadedExtensionProcAddr,
 	xsGetKernelLoadedExtensionProcAddr,
 	
+	xsModuleSendMessage,
+
 	xsGetKernelIniParserApi,
 
 	xsKernelShutdown
