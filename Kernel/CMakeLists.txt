@@ -7,6 +7,4 @@ add_library(XSystem.Kernel SHARED "src/general.h" "src/main.cpp" "src/kernel/ker
 add_library(XSystem.Kernel-headers INTERFACE)
 target_include_directories(XSystem.Kernel-headers INTERFACE "include/")
 
-set_property(TARGET XSystem.Kernel PROPERTY POSITION_INDEPENDENT_CODE ON)
-
 target_link_libraries(XSystem.Kernel PRIVATE XSystem.SDK XSystem.Kernel-headers)
