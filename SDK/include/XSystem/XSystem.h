@@ -62,6 +62,8 @@ typedef struct {
 	void* (*xsGetKernelLoadedExtensionProc)(uint32_t m_nInx, const char* m_sProcName);
 	void* (*xsGetKernelLoadedExtensionProcFromName)(const char* m_sName, const char* m_sProcName);
 
+	void (*xsModuleSendMessage)(uint32_t m_nInx, const char* m_sMessage, const xsResult m_nRes);
+
 	void* (*xsGetKernelIniParserApi)();
 
 	void (*xsKernelShutdown)();
