@@ -18,14 +18,14 @@ xsAPI* xsLoadKernel(const xsExtensionInfo* KernelExtensionInfo, pfn_xsKernelMess
 	if (m_pAddr == NULL) {
 		xsUnloadLibrary(m_pKernelHandle);
 
-		g_KernelMessage("[xs]: check kernel library version failed to find xsKernelSDKVersion!", XS_RESULT_FAILED);
+		g_KernelMessage("XSystem.SDK", 0, "check kernel library version failed to find xsKernelSDKVersion!", __FILE__, __LINE__ ,XS_RESULT_FAILED);
 		return XS_NULL_HANDLE;
 	}
 
 	if (XS_SDK_VERSION != *(uint32_t*)m_pAddr) {
 		xsUnloadLibrary(m_pKernelHandle);
 
-		g_KernelMessage("[xs]: check kernel library sdk version matches application sdk version!", XS_RESULT_FAILED);
+		g_KernelMessage("XSystem.SDK", 0, "check kernel library sdk version matches application sdk version!", __FILE__, __LINE__, XS_RESULT_FAILED);
 		return XS_NULL_HANDLE;
 	}
 
@@ -33,7 +33,7 @@ xsAPI* xsLoadKernel(const xsExtensionInfo* KernelExtensionInfo, pfn_xsKernelMess
 	if (m_pAddr == NULL) {
 		xsUnloadLibrary(m_pKernelHandle);
 
-		g_KernelMessage("[xs]: check kernel library version failed to find xsKernelEntry!", XS_RESULT_FAILED);
+		g_KernelMessage("XSystem.SDK", 0, "check kernel library version failed to find xsKernelEntry!", __FILE__, __LINE__, XS_RESULT_FAILED);
 		return XS_NULL_HANDLE;
 	}
 
@@ -47,7 +47,7 @@ xsAPI* xsLoadKernel(const xsExtensionInfo* KernelExtensionInfo, pfn_xsKernelMess
 	if (m_pAddr == NULL) {
 		xsUnloadLibrary(m_pKernelHandle);
 
-		g_KernelMessage("[xs]: check kernel library version failed to find xsGetKernelApi!", XS_RESULT_FAILED);
+		g_KernelMessage("XSystem.SDK", 0, "check kernel library version failed to find xsGetKernelApi!", __FILE__, __LINE__, XS_RESULT_FAILED);
 		return XS_NULL_HANDLE;
 	}
 

@@ -35,17 +35,17 @@ void xsPrintLibraryError(const char* path) {
 
 	char* m_pMessage = (char*)malloc(m_MsgLength);
 	if (m_pMessage == NULL) {
-		g_KernelMessage("[xs]: not enogh memory for print error!", XS_RESULT_FAILED);
+		g_KernelMessage("XSystem.SDK", 0, "not enogh memory for print error!", __FILE__, __LINE__, XS_RESULT_FAILED);
 		exit(-101);
 	}
 	memset(m_pMessage, 0x0, m_MsgLength);
 
-	strcat(m_pMessage, "[xs]: failed to load library '");
+	strcat(m_pMessage, "failed to load library '");
 	strcat(m_pMessage, path);
 	strcat(m_pMessage, "':\n");
 	strcat(m_pMessage, m_pSystemMessageBuffer);
 
-	g_KernelMessage(m_pMessage, XS_RESULT_FAILED);
+	g_KernelMessage("XSystem.SDK", 0,  m_pMessage, __FILE__, __LINE__, XS_RESULT_FAILED);
 }
 
 xsExtensionModuleHandle xsLoadLibrary(const char* path){

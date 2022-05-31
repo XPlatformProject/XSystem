@@ -17,7 +17,7 @@ xsIniFileCtx* xsParseIniFile(const char* m_sPath){
 		m_sMessage += m_sPath;
 		m_sMessage += "'!";
 
-		g_KernelMessage(m_sMessage.c_str(), xsResult::XS_RESULT_FAILED);
+		g_KernelMessage("XSystem.Kernel", 0, m_sMessage.c_str(), __FILE__, __LINE__, xsResult::XS_RESULT_FAILED);
 
 		return XS_NULL_HANDLE;
 	}

@@ -63,14 +63,14 @@ typedef struct {
 	void* (*xsGetKernelLoadedExtensionProc)(uint32_t m_nInx, const char* m_sProcName);
 	void* (*xsGetKernelLoadedExtensionProcFromName)(const char* m_sName, const char* m_sProcName);
 
-	void (*xsModuleSendMessage)(uint32_t m_nInx, const char* m_sMessage, const xsResult m_nRes);
+	void (*xsModuleSendMessage)(uint32_t m_nInx, const char* m_sMessage, const char* m_sFileName, const size_t m_nLine, const xsResult m_nRes);
 
 	void* (*xsGetKernelIniParserApi)();
 
 	void (*xsKernelShutdown)();
 }xsAPI;
 
-typedef void(*pfn_xsKernelMessageCallback)(const char* m_sMsg, const uint32_t m_nResult);
+typedef void(*pfn_xsKernelMessageCallback)(const char* m_sName, uint32_t m_nInx, const char* m_sMsg, const char* m_sFileName, const size_t m_nLine, const uint32_t m_nResult);
 
 xsAPI* xsLoadKernel(const xsExtensionInfo* KernelExtensionInfo, pfn_xsKernelMessageCallback Callback);
 void xsUnloadKernel(void);

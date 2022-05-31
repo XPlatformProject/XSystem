@@ -57,7 +57,7 @@ xsResult xsKernelLoadExtensionFromIni(const char* m_sPath, xsExtensionInfo* m_pE
 		m_sMessage += m_sPath;
 		m_sMessage += "'!";
 
-		g_KernelMessage(m_sMessage.c_str(), xsResult::XS_RESULT_FAILED);
+		g_KernelMessage("XSystem.Kernel", 0, m_sMessage.c_str(), __FILE__, __LINE__, xsResult::XS_RESULT_FAILED);
 
 		return xsResult::XS_RESULT_FAILED;
 	}
@@ -68,7 +68,7 @@ xsResult xsKernelLoadExtensionFromIni(const char* m_sPath, xsExtensionInfo* m_pE
 		m_sMessage += m_sPath;
 		m_sMessage += "'!";
 
-		g_KernelMessage(m_sMessage.c_str(), xsResult::XS_RESULT_FAILED);
+		g_KernelMessage("XSystem.Kernel", 0, m_sMessage.c_str(), __FILE__, __LINE__, xsResult::XS_RESULT_FAILED);
 
 		return xsResult::XS_RESULT_FAILED;
 	}
@@ -78,7 +78,7 @@ xsResult xsKernelLoadExtensionFromIni(const char* m_sPath, xsExtensionInfo* m_pE
 		m_sMessage += m_sPath;
 		m_sMessage += "'!";
 
-		g_KernelMessage(m_sMessage.c_str(), xsResult::XS_RESULT_FAILED);
+		g_KernelMessage("XSystem.Kernel", 0, m_sMessage.c_str(), __FILE__, __LINE__, xsResult::XS_RESULT_FAILED);
 
 	}
 	xsIniFileParameter* m_pParVersion = xsGetIniFileSectionParameter(m_pSection, "Version");
@@ -87,7 +87,7 @@ xsResult xsKernelLoadExtensionFromIni(const char* m_sPath, xsExtensionInfo* m_pE
 		m_sMessage += m_sPath;
 		m_sMessage += "'!";
 
-		g_KernelMessage(m_sMessage.c_str(), xsResult::XS_RESULT_FAILED);
+		g_KernelMessage("XSystem.Kernel", 0, m_sMessage.c_str(), __FILE__, __LINE__, xsResult::XS_RESULT_FAILED);
 
 	}
 
@@ -113,11 +113,14 @@ xsResult xsKernelLoadExtension(xsExtensionInfo* m_pExtInfo){
 		return xsResult::XS_RESULT_FAILED;
 	}
 
+	m_vLoadedExtensionsHandles.push_back(m_pHandle);
+
+	m_pExtInfo->m_nInx = m_vLoadedExtensionsHandles.size() - 1;
+	m_vLoadedExtensionsInfo.push_back(*m_pExtInfo);
+
 	xsAddress m_pEntryFunctionAddr = xsGetProcAddr(m_pHandle, "xsModuleEntry");
 
 	xsResult(*xsModuleEntry)(xsAPI* m_pAPI)= reinterpret_cast<xsResult (*)(xsAPI*)>(m_pEntryFunctionAddr);
-
-	m_vLoadedExtensionsInfo.push_back(*m_pExtInfo);
 
 	xsResult m_nRes = xsModuleEntry(xsGetKernelApi(XS_VERSION_0_1));
 
@@ -125,10 +128,6 @@ xsResult xsKernelLoadExtension(xsExtensionInfo* m_pExtInfo){
 		xsUnloadLibrary(m_pHandle);
 		return m_nRes;
 	}
-
-	m_vLoadedExtensionsHandles.push_back(m_pHandle);
-
-	m_pExtInfo->m_nInx = m_vLoadedExtensionsHandles.size() - 1;
 
 	return xsResult::XS_RESULT_SUCCESS;
 }
@@ -138,7 +137,9 @@ uint32_t xsGetKernelLoadedExtensionsCount(){
 }
 
 xsExtensionInfo* xsGetKernelLoadedExtensionInfo(uint32_t m_nInx){
-	assert(m_vLoadedExtensionsInfo.size() > m_nInx);
+	if (m_vLoadedExtensionsInfo.size() < m_nInx) {
+		return NULL;
+	}
 
 	return &m_vLoadedExtensionsInfo[m_nInx];
 }
@@ -154,7 +155,7 @@ xsExtensionInfo* xsGetKernelLoadedExtensionInfo(const char* m_sName){
 }
 
 void* xsGetKernelLoadedExtensionProcAddr(uint32_t m_nInx, const char* m_sProcName){
-	assert(m_vLoadedExtensionsHandles.size() > m_nInx);
+	if (m_vLoadedExtensionsHandles.size() < m_nInx) return NULL;
 
 	return xsGetProcAddr(m_vLoadedExtensionsHandles[m_nInx], m_sProcName);
 }
@@ -166,13 +167,9 @@ void* xsGetKernelLoadedExtensionProcAddr(const char* m_sName, const char* m_sPro
 	return xsGetProcAddr(m_pHandle, m_sProcName);
 }
 
-void xsModuleSendMessage(uint32_t m_nInx, const char* m_sMassage, const xsResult m_nRes){
-	
-	g_KernelMessage(m_sMassage, m_nRes);
-}
 
 void* xsGetKernelLoadedExtensionHandle(uint32_t m_nInx) {
-	assert(m_vLoadedExtensionsInfo.size() <= m_nInx);
+	if (m_vLoadedExtensionsHandles.size() < m_nInx) return NULL;
 
 	return (void*) m_vLoadedExtensionsHandles[m_nInx];
 }
@@ -185,4 +182,15 @@ void* xsGetKernelLoadedExtensionHandle(const char* m_sName){
 	}
 
 	return XS_NULL_HANDLE;
+}
+
+
+void xsModuleSendMessage(uint32_t m_nInx, const char* m_sMessage, const char* m_sFileName, const size_t m_nLine, const xsResult m_nRes) {
+	xsExtensionInfo* m_pExtInfo = xsGetKernelLoadedExtensionInfo(m_nInx);
+	if (m_pExtInfo == NULL) {
+		g_KernelMessage("m_pExtInfo == NULL", m_nInx, m_sMessage, __FILE__, m_nLine, m_nRes);
+		return;
+	}
+
+	g_KernelMessage(m_pExtInfo->m_sName.c_str(), m_nInx, m_sMessage, __FILE__, m_nLine, m_nRes);
 }
