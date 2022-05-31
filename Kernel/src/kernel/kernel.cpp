@@ -95,7 +95,12 @@ xsResult xsKernelLoadExtensionFromIni(const char* m_sPath, xsExtensionInfo* m_pE
 	m_sExtInfo.m_nVersion = atoi(m_pParVersion->m_sValue);
 	m_sExtInfo.m_sName = m_pParName->m_sValue;
 
+
 	xsResult m_nRes = xsKernelLoadExtension(&m_sExtInfo);
+
+	m_pExtInfo->m_sPath = m_pParPath->m_sValue;
+	m_pExtInfo->m_nVersion = atoi(m_pParVersion->m_sValue);
+	m_pExtInfo->m_sName = m_pParName->m_sValue;
 
 	xsFreeIniFile(m_pCtx);
 	return m_nRes;
@@ -111,6 +116,8 @@ xsResult xsKernelLoadExtension(xsExtensionInfo* m_pExtInfo){
 
 	xsResult(*xsModuleEntry)(xsAPI* m_pAPI)= reinterpret_cast<xsResult (*)(xsAPI*)>(m_pEntryFunctionAddr);
 
+	m_vLoadedExtensionsInfo.push_back(*m_pExtInfo);
+
 	xsResult m_nRes = xsModuleEntry(xsGetKernelApi(XS_VERSION_0_1));
 
 	if (m_nRes == xsResult::XS_RESULT_FAILED) {
@@ -120,7 +127,6 @@ xsResult xsKernelLoadExtension(xsExtensionInfo* m_pExtInfo){
 
 	m_vLoadedExtensionsHandles.push_back(m_pHandle);
 
-	m_vLoadedExtensionsInfo.push_back(*m_pExtInfo);
 	return xsResult::XS_RESULT_SUCCESS;
 }
 
