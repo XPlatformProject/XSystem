@@ -6,18 +6,27 @@ add_custom_command(
         TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 $<TARGET_FILE:${dependence}>
-                $<TARGET_FILE_DIR:${target}>)
+                $<TARGET_FILE_DIR:${target}>/${dependence}.dll)
 
 
 endfunction(xs_add_dependence)
 
 function(xs_add_dependence_module target dependence)
 
+set(_LocalDepenceModuleConfigPath "${${dependence}_INI_FILE_PATH}")
+message("module path: ${_LocalDepenceModuleConfigPath}")
+
 add_custom_command(
         TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 $<TARGET_FILE:${dependence}>
-                $<TARGET_FILE_DIR:${target}>/Engine/${dependence}.dll)
+                $<TARGET_FILE_DIR:${target}>/Engine/${dependence}/${dependence}.dll)
+
+add_custom_command(
+        TARGET ${target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${${dependence}_INI_FILE_PATH}"
+                $<TARGET_FILE_DIR:${target}>/Engine/${dependence}/Config.ini)
 
 
 endfunction(xs_add_dependence_module)
