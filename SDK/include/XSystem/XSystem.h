@@ -4,6 +4,8 @@
 #include<string>
 
 #include <stdint.h>
+#include <stddef.h>
+#include <stdint.h>
 
 #define XS_SDK_VERSION 0x01
 
@@ -25,8 +27,6 @@
 #define XS_API_FUNCTION "xsGetKernelApi"
 #define XS_API_SDK_VERSION "xsKernelSDKVersion"
 
-
-
 #define XS_NULL_HANDLE 0x0
 
 // Basic functional!
@@ -43,6 +43,7 @@ typedef struct {
 	std::string m_sName;
 	std::string m_sPath;
 	uint32_t m_nVersion;
+	size_t m_nInx;
 }xsExtensionInfo;
 
 typedef struct {

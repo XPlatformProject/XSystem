@@ -20,6 +20,7 @@ void xsMemCpy(const void* Src, void* Dest, size_t m_nSize) {
 xsResult xsKernelInit(xsExtensionInfo* KernelExtInfo){
 	//Add kernel extension!
 
+	KernelExtInfo->m_nInx = 0;
 	m_vLoadedExtensionsInfo.push_back(*KernelExtInfo);
 	m_vLoadedExtensionsHandles.push_back(XS_NULL_HANDLE);
 
@@ -95,12 +96,12 @@ xsResult xsKernelLoadExtensionFromIni(const char* m_sPath, xsExtensionInfo* m_pE
 	m_sExtInfo.m_nVersion = atoi(m_pParVersion->m_sValue);
 	m_sExtInfo.m_sName = m_pParName->m_sValue;
 
-
 	xsResult m_nRes = xsKernelLoadExtension(&m_sExtInfo);
 
 	m_pExtInfo->m_sPath = m_pParPath->m_sValue;
 	m_pExtInfo->m_nVersion = atoi(m_pParVersion->m_sValue);
 	m_pExtInfo->m_sName = m_pParName->m_sValue;
+	m_pExtInfo->m_nInx = m_sExtInfo.m_nInx;
 
 	xsFreeIniFile(m_pCtx);
 	return m_nRes;
@@ -126,6 +127,8 @@ xsResult xsKernelLoadExtension(xsExtensionInfo* m_pExtInfo){
 	}
 
 	m_vLoadedExtensionsHandles.push_back(m_pHandle);
+
+	m_pExtInfo->m_nInx = m_vLoadedExtensionsHandles.size() - 1;
 
 	return xsResult::XS_RESULT_SUCCESS;
 }
