@@ -14,7 +14,6 @@ endfunction(xs_add_dependence)
 function(xs_add_dependence_module target dependence)
 
 set(_LocalDepenceModuleConfigPath "${${dependence}_INI_FILE_PATH}")
-message("module path: ${_LocalDepenceModuleConfigPath}")
 
 add_custom_command(
         TARGET ${target} POST_BUILD
