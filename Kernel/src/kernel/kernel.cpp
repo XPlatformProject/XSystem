@@ -188,9 +188,9 @@ void* xsGetKernelLoadedExtensionHandle(const char* m_sName){
 void xsModuleSendMessage(uint32_t m_nInx, const char* m_sMessage, const char* m_sFileName, const size_t m_nLine, const xsResult m_nRes) {
 	xsExtensionInfo* m_pExtInfo = xsGetKernelLoadedExtensionInfo(m_nInx);
 	if (m_pExtInfo == NULL) {
-		g_KernelMessage("m_pExtInfo == NULL", m_nInx, m_sMessage, __FILE__, m_nLine, m_nRes);
+		g_KernelMessage("m_pExtInfo == NULL", m_nInx, m_sMessage, m_sFileName, m_nLine, m_nRes);
 		return;
 	}
 
-	g_KernelMessage(m_pExtInfo->m_sName.c_str(), m_nInx, m_sMessage, __FILE__, m_nLine, m_nRes);
+	g_KernelMessage(m_pExtInfo->m_sName.c_str(), m_nInx, m_sMessage, m_sFileName, m_nLine, m_nRes);
 }
