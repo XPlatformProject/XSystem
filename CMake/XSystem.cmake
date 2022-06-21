@@ -6,14 +6,12 @@ add_custom_command(
         TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 $<TARGET_FILE:${dependence}>
-                $<TARGET_FILE_DIR:${target}>/${dependence}.dll)
+                $<TARGET_FILE_DIR:${target}>)
 
 
 endfunction(xs_add_dependence)
 
 function(xs_add_dependence_module target dependence)
-
-set(_LocalDepenceModuleConfigPath "${${dependence}_INI_FILE_PATH}")
 
 add_custom_command(
         TARGET ${target} POST_BUILD
